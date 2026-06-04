@@ -69,6 +69,13 @@ export const usePetStore = defineStore('pet', () => {
   /** 当前应用模式 */
   const appMode = ref<AppMode>('pet')
 
+  /**
+   * 待跳转的工作日期
+   * 当通过提醒"去处理"进入工作台时，Workspace 监测此值自动跳转到对应日期的工作表单。
+   * 设为 null 表示没有待跳转。
+   */
+  const pendingWorkDate = ref<Date | null>(null)
+
   // ===== 计算属性 =====
 
   /** 宠物是否正在移动中 */
@@ -137,6 +144,16 @@ export const usePetStore = defineStore('pet', () => {
   }
 
   /**
+   * 设置待跳转的工作日期
+   * Workspace 组件 watch 此值，非 null 时自动跳转到对应日期的工作表单
+   *
+   * @param date - 要跳转的日期，传 null 清除待跳转状态
+   */
+  const setPendingWorkDate = (date: Date | null): void => {
+    pendingWorkDate.value = date
+  }
+
+  /**
    * 重置宠物状态到初始值
    * 用于重新开始或错误恢复场景
    */
@@ -163,6 +180,8 @@ export const usePetStore = defineStore('pet', () => {
     openWorkspace,
     openChat,
     closeSubWindow,
+    pendingWorkDate,
+    setPendingWorkDate,
     reset,
   }
 })

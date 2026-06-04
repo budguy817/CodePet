@@ -52,6 +52,24 @@
           placeholder="如：50% / 进行中 / 已完成"
         />
       </label>
+
+      <!-- 每日提醒时间设置 -->
+      <div class="work-form-reminder">
+        <span class="work-form-reminder-label">⏰ 每日提醒</span>
+        <div class="work-form-reminder-controls">
+          <input
+            type="time"
+            :value="workStore.reminderTime"
+            class="work-form-time-input"
+            @change="handleReminderTimeChange"
+          />
+          <button
+            class="work-form-switch work-form-reminder-switch"
+            :class="{ 'work-form-switch--on': workStore.reminderEnabled }"
+            @click="toggleReminder"
+          />
+        </div>
+      </div>
     </div>
 
     <div v-if="!isDateCompleted" class="work-form-footer">
@@ -193,6 +211,26 @@ const removeRecord = (id: number): void => {
     cancelEdit()
   }
   workStore.removeRecord(id)
+}
+
+// ===== 提醒时间相关方法 =====
+
+/**
+ * 提醒时间变更处理
+ * 将原生 time input 的 "HH:MM" 值保存到 workStore
+ */
+const handleReminderTimeChange = (e: Event): void => {
+  const target = e.target as HTMLInputElement
+  if (target.value) {
+    workStore.setReminderTime(target.value)
+  }
+}
+
+/**
+ * 切换每日提醒开关
+ */
+const toggleReminder = (): void => {
+  workStore.setReminderEnabled(!workStore.reminderEnabled)
 }
 </script>
 
@@ -456,5 +494,64 @@ const removeRecord = (id: number): void => {
 
 .work-form-switch--on::after {
   transform: translateX(18px);
+}
+
+/* ========================================
+   每日提醒时间设置
+   ======================================== */
+
+.work-form-reminder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  margin-top: 4px;
+  border-top: 1px dashed rgba(180, 170, 200, 0.3);
+}
+
+.work-form-reminder-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6d5080;
+}
+
+.work-form-reminder-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.work-form-time-input {
+  padding: 4px 8px;
+  border: 1px solid rgba(180, 170, 200, 0.4);
+  border-radius: 6px;
+  font-size: 12px;
+  color: #4a3060;
+  background: rgba(255, 255, 255, 0.7);
+  outline: none;
+  width: 90px;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+
+.work-form-time-input:focus {
+  border-color: #b89ad8;
+}
+
+.work-form-reminder-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.work-form-reminder-switch::after {
+  width: 16px;
+  height: 16px;
+  top: 1.5px;
+  left: 1.5px;
+}
+
+.work-form-reminder-switch.work-form-switch--on::after {
+  transform: translateX(16px);
 }
 </style>

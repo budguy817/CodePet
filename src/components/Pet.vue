@@ -42,7 +42,10 @@
         <button class="context-menu-item" @click="handleChatClick">
           智能问答
         </button>
-        <button class="context-menu-item" @click="handleExitClick">
+        <button class="context-menu-item" @click="handleHideToTrayClick">
+          隐藏到托盘
+        </button>
+        <button class="context-menu-item context-menu-item--danger" @click="handleExitClick">
           退出
         </button>
       </div>
@@ -65,6 +68,25 @@
       </div>
     </Transition>
 
+    <!-- 工作提醒对话云层 -->
+    <Transition name="dialog-fade">
+      <div v-if="showReminderDialog" class="reminder-cloud">
+        <p class="reminder-cloud-text">
+          {{ reminderMessage }}
+        </p>
+        <div class="reminder-cloud-actions">
+          <button class="reminder-cloud-btn reminder-cloud-btn--cancel" @click="handleReminderWait">
+            再等等
+          </button>
+          <button class="reminder-cloud-btn reminder-cloud-btn--confirm" @click="handleReminderGo">
+            去处理
+          </button>
+        </div>
+        <!-- 小三角尾巴 -->
+        <div class="reminder-cloud-tail" />
+      </div>
+    </Transition>
+
     <!-- 点击反馈气泡 -->
     <Transition name="feedback-fade">
       <div v-if="showClickFeedback" class="click-feedback">
@@ -76,14 +98,12 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { getCurrentWindow } from '@tauri-apps/api/window'
 import { usePetStore } from '@/stores/petStore'
 import { useWindowDrag } from '@/composables/useWindowDrag'
 import { useCursorEvents } from '@/composables/useCursorEvents'
+import { useWorkReminder } from '@/composables/useWorkReminder'
+import { useTray } from '@/composables/useTray'
 import PetAnimation from './PetAnimation.vue'
-
-// 缓存窗口引用（用于退出）
-const appWindow = getCurrentWindow()
 
 // ===== Store =====
 const petStore = usePetStore()
@@ -91,6 +111,7 @@ const petStore = usePetStore()
 // ===== Composables =====
 const { isDragging, onMouseDown } = useWindowDrag()
 const { setIgnoreCursorEvents, isAvailable: isCursorEventsAvailable } = useCursorEvents()
+const { hideToTray, quitApp, setupTrayListeners, cleanupTrayListeners, isTrayReady } = useTray()
 
 // ===== 本地状态 =====
 /** 是否显示点击反馈文字 */
@@ -146,10 +167,53 @@ const handleExitClick = (): void => {
   showExitDialog.value = true
 }
 
-/** 确认退出 */
+/** 点击右键菜单"隐藏到托盘" */
+const handleHideToTrayClick = (): void => {
+  contextMenuVisible.value = false
+  hideToTray()
+}
+
+/** 确认退出 —— 彻底关闭应用并清理托盘图标 */
 const handleExitConfirm = async (): Promise<void> => {
-  // destroy() 强制关闭窗口，比 close() 更可靠
-  await appWindow.destroy()
+  // 调用 Rust 后端 quit_app 命令彻底退出进程
+  // 此操作会清理系统托盘图标，不留后台进程
+  await quitApp()
+}
+
+// ===== 工作提醒对话框 =====
+/** 是否显示工作提醒对话云层 */
+const showReminderDialog = ref<boolean>(false)
+/** 提醒文案 */
+const reminderMessage = ref<string>('你今天的工作还没有完成哦，要去看一下吗？')
+
+/**
+ * 提醒触发回调（由 useWorkReminder 在到达提醒时间时调用）
+ * 显示宠物对话气泡提醒用户处理未完成的工作
+ */
+const onReminderTrigger = (): void => {
+  showReminderDialog.value = true
+}
+
+// 注册工作提醒（30 秒检查一次，到达提醒时间时触发 onReminderTrigger）
+useWorkReminder(onReminderTrigger, 'Pet')
+
+/**
+ * 用户点击"再等等" → 关闭提醒气泡
+ * 当天不会再提醒（useWorkReminder 已标记今天已提醒）
+ */
+const handleReminderWait = (): void => {
+  showReminderDialog.value = false
+}
+
+/**
+ * 用户点击"去处理" → 关闭提醒气泡，切换到工作台并跳转到今天的工作表单
+ */
+const handleReminderGo = (): void => {
+  showReminderDialog.value = false
+  // 设置待跳转日期为今天，Workspace 会监听并自动跳转
+  petStore.setPendingWorkDate(new Date())
+  // 切换到工作台模式
+  petStore.openWorkspace()
 }
 
 // ===== 拖拽状态监听 =====
@@ -208,13 +272,19 @@ onMounted(() => {
   // 这样宠物身体可以正常响应点击和拖拽
   setIgnoreCursorEvents(false)
 
+  // 注册托盘事件监听（模式切换事件）
+  setupTrayListeners()
+
   console.log('[CodePet] 🐾 宠物已就绪！')
   console.log(`[CodePet] 鼠标穿透功能: ${isCursorEventsAvailable.value ? '✅ 可用' : '❌ 不可用，已回退'}`)
+  console.log(`[CodePet] 系统托盘功能: ${isTrayReady.value ? '✅ 可用' : '⚠️ 部分不可用（事件监听失败）'}`)
 })
 
 onUnmounted(() => {
   // 清理右键菜单监听
   document.removeEventListener('mousedown', onOutsideClick, true)
+  // 清理托盘事件监听（防止内存泄漏）
+  cleanupTrayListeners()
   // 组件销毁时恢复穿透，避免残留窗口阻挡桌面操作
   setIgnoreCursorEvents(true)
 })
@@ -334,6 +404,15 @@ onUnmounted(() => {
   background: rgba(200, 180, 220, 0.3);
 }
 
+/* 退出菜单项 —— 危险操作使用警示色调 */
+.context-menu-item--danger {
+  color: #c97a7a;
+}
+
+.context-menu-item--danger:hover {
+  background: rgba(220, 180, 180, 0.35);
+}
+
 /* 右键菜单过渡 */
 .menu-fade-enter-active,
 .menu-fade-leave-active {
@@ -433,5 +512,83 @@ onUnmounted(() => {
 .dialog-fade-leave-to {
   opacity: 0;
   transform: translateX(-50%) translateY(-8px) scale(0.9);
+}
+
+/* ========================================
+   工作提醒对话云层
+   复用 dialog-fade 过渡动画
+   ======================================== */
+
+.reminder-cloud {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px 16px;
+  box-shadow: 0 3px 16px rgba(130, 120, 170, 0.18);
+  text-align: center;
+  min-width: 200px;
+  max-width: 240px;
+}
+
+.reminder-cloud-text {
+  color: #5d4070;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.reminder-cloud-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.reminder-cloud-btn {
+  padding: 4px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.reminder-cloud-btn--cancel {
+  background: rgba(200, 190, 220, 0.35);
+  color: #7d6090;
+}
+
+.reminder-cloud-btn--cancel:hover {
+  background: rgba(200, 190, 220, 0.55);
+}
+
+.reminder-cloud-btn--confirm {
+  background: #b89ad8;
+  color: #fff;
+}
+
+.reminder-cloud-btn--confirm:hover {
+  background: #a080c8;
+}
+
+/* 对话云层小三角尾巴 */
+.reminder-cloud-tail {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(255, 255, 255, 0.94);
 }
 </style>

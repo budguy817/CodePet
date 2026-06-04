@@ -5,6 +5,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 // 全局样式（Tailwind CSS + 自定义基础样式）
+import './style.css'
 import './assets/main.css'
 
 // 创建 Pinia 状态管理实例
