@@ -1,0 +1,4 @@
+# Use Rust's built-in LLVM linker (rust-lld) instead of MSVC link.exe
+# This avoids needing Visual Studio Build Tools installed
+[target.x86_64-pc-windows-msvc]
+linker = "rust-lld"
