@@ -96,190 +96,64 @@ const filteredRecords = computed<WorkRecord[]>(() => {
 
 <style scoped>
 /* ========================================
-   WorkLog — 夜曲工作室 暗色主题
+   WorkLog — 半透明卡片风格
    ======================================== */
 
-.work-log {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+.work-log { height: 100%; display: flex; flex-direction: column; }
 
-/* ===== 头部 ===== */
 .work-log-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 10px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(140, 120, 170, 0.12);
   flex-shrink: 0;
 }
-
-.work-log-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #e4e4ec;
-}
+.work-log-title { font-size: 14px; font-weight: 600; color: #3a2850; }
 
 .work-log-back {
-  padding: 4px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: #6e6e80;
-  border-radius: 7px;
-  font-size: 11px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 4px 12px; border: 1px solid rgba(140, 120, 170, 0.15);
+  background: rgba(255, 255, 255, 0.4); color: #6e6080;
+  border-radius: 7px; font-size: 11px; cursor: pointer; transition: all 0.2s ease;
 }
+.work-log-back:hover { background: rgba(255, 255, 255, 0.7); color: #3a2850; }
 
-.work-log-back:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #e4e4ec;
-}
-
-/* ===== 筛选区 ===== */
 .work-log-filter {
-  padding: 10px 16px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 10px 16px; display: flex; align-items: center; gap: 6px;
+  flex-wrap: wrap; border-bottom: 1px solid rgba(140, 120, 170, 0.08);
   flex-shrink: 0;
 }
-
 .work-log-filter-select {
-  padding: 5px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 7px;
-  font-size: 11px;
-  color: #e4e4ec;
-  background: rgba(255, 255, 255, 0.03);
-  cursor: pointer;
+  padding: 5px 10px; border: 1px solid rgba(140, 120, 170, 0.2);
+  border-radius: 7px; font-size: 11px; color: #3a2850;
+  background: rgba(255, 255, 255, 0.5); cursor: pointer;
 }
-
-.work-log-filter-select option {
-  background: #1a1a2e;
-  color: #e4e4ec;
-}
-
 .work-log-filter-input {
-  padding: 5px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 7px;
-  font-size: 11px;
-  color: #e4e4ec;
-  background: rgba(255, 255, 255, 0.03);
-  width: 110px;
-  outline: none;
+  padding: 5px 8px; border: 1px solid rgba(140, 120, 170, 0.2);
+  border-radius: 7px; font-size: 11px; color: #3a2850;
+  background: rgba(255, 255, 255, 0.5); width: 110px; outline: none;
 }
-.work-log-filter-input:focus {
-  border-color: rgba(226, 176, 74, 0.35);
-}
+.work-log-filter-input:focus { border-color: rgba(184, 138, 58, 0.4); }
+.work-log-filter-sep { font-size: 11px; color: #8e7ea0; }
 
-.work-log-filter-sep {
-  font-size: 11px;
-  color: #444456;
-}
-
-/* ===== 列表 ===== */
-.work-log-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px 16px 12px;
-}
-
-.work-log-empty {
-  text-align: center;
-  color: #444456;
-  font-size: 13px;
-  padding: 40px 0;
-}
+.work-log-list { flex: 1; overflow-y: auto; padding: 8px 16px 12px; }
+.work-log-empty { text-align: center; color: #b0a0c0; font-size: 13px; padding: 40px 0; }
 
 .work-log-item {
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin-bottom: 8px;
-  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.45); border: 1px solid rgba(140, 120, 170, 0.08);
+  border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; transition: all 0.2s ease;
 }
+.work-log-item:hover { background: rgba(255, 255, 255, 0.65); border-color: rgba(140, 120, 170, 0.15); }
 
-.work-log-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.work-log-item-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 5px;
-}
-
-.work-log-item-date {
-  font-size: 11px;
-  color: #555568;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-.work-log-item-tag {
-  background: rgba(226, 176, 74, 0.12);
-  color: #e2b04a;
-  padding: 1px 8px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.work-log-item-urgency {
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 10px;
-}
-
-.urgency--urgent { background: rgba(212, 120, 122, 0.15); color: #d4787a; }
-.urgency--high   { background: rgba(226, 176, 74, 0.15); color: #e2b04a; }
-.urgency--mid    { background: rgba(145, 128, 200, 0.12); color: #9180c8; }
-.urgency--low    { background: rgba(110, 184, 154, 0.12); color: #6eb89a; }
-
-.work-log-item-content {
-  font-size: 12px;
-  color: #a0a0b4;
-  line-height: 1.5;
-  margin-bottom: 4px;
-}
-
-.work-log-item-foot {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.work-log-item-progress {
-  font-size: 11px;
-  color: #555568;
-}
-
-.work-log-item-del {
-  margin-left: auto;
-  border: none;
-  background: none;
-  color: #444456;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0 4px;
-  transition: color 0.15s;
-}
-
-.work-log-item-del:hover {
-  color: #d4787a;
-}
-</style>
-
-.work-log-item-del:hover {
-  color: #a080b8;
-}
+.work-log-item-head { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.work-log-item-date { font-size: 11px; color: #8e7ea0; font-weight: 500; }
+.work-log-item-tag { background: rgba(184, 138, 58, 0.15); color: #8a6030; padding: 1px 8px; border-radius: 5px; font-size: 11px; font-weight: 500; }
+.work-log-item-urgency { padding: 1px 6px; border-radius: 4px; font-weight: 600; font-size: 10px; }
+.urgency--urgent { background: rgba(196, 104, 106, 0.15); color: #a05052; }
+.urgency--high   { background: rgba(184, 138, 58, 0.15); color: #8a6030; }
+.urgency--mid    { background: rgba(125, 104, 184, 0.12); color: #6e50a8; }
+.urgency--low    { background: rgba(94, 158, 128, 0.12); color: #4a7a60; }
+.work-log-item-content { font-size: 12px; color: #5a4068; line-height: 1.5; margin-bottom: 4px; }
+.work-log-item-foot { display: flex; align-items: center; gap: 6px; }
+.work-log-item-progress { font-size: 11px; color: #8e7ea0; }
+.work-log-item-del { margin-left: auto; border: none; background: none; color: #b0a0c0; font-size: 13px; cursor: pointer; padding: 0 4px; transition: color 0.15s; }
+.work-log-item-del:hover { color: #c4686a; }
 </style>

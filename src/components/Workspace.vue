@@ -8,7 +8,7 @@
   设计语言：深靛蓝底 + 玻璃面板 + 琥珀暖调点缀
 -->
 <template>
-  <div class="workspace">
+  <div class="workspace" :style="{ background: currentSkin }">
     <!-- 顶部栏（可拖拽窗口） -->
     <div class="ws-topbar" @mousedown="onTopbarMouseDown">
       <button class="ws-btn-back" @click="handleClose">
@@ -217,33 +217,29 @@ onMounted(() => {
    ======================================== */
 
 .workspace {
-  --ws-bg: #09090f;
-  --ws-bg-soft: #12121d;
-  --ws-surface: rgba(255, 255, 255, 0.025);
-  --ws-surface-hover: rgba(255, 255, 255, 0.05);
-  --ws-surface-active: rgba(255, 255, 255, 0.08);
-  --ws-border: rgba(255, 255, 255, 0.06);
-  --ws-border-focus: rgba(255, 255, 255, 0.12);
-  --ws-text: #e4e4ec;
-  --ws-text-muted: #6e6e80;
-  --ws-text-dim: #444456;
-  --ws-accent: #e2b04a;
-  --ws-accent-soft: #c99a3a;
-  --ws-accent-glow: rgba(226, 176, 74, 0.12);
-  --ws-accent-glow-strong: rgba(226, 176, 74, 0.25);
-  --ws-lavender: #9180c8;
-  --ws-lavender-glow: rgba(145, 128, 200, 0.12);
-  --ws-rose: #d4787a;
-  --ws-mint: #6eb89a;
+  --ws-surface: rgba(0, 0, 0, 0.04);
+  --ws-surface-hover: rgba(0, 0, 0, 0.08);
+  --ws-surface-active: rgba(0, 0, 0, 0.12);
+  --ws-border: rgba(0, 0, 0, 0.06);
+  --ws-border-focus: rgba(0, 0, 0, 0.12);
+  --ws-text: #2a2035;
+  --ws-text-muted: #6e6080;
+  --ws-text-dim: #a090b0;
+  --ws-accent: #b88a3a;
+  --ws-accent-soft: #9a6e2e;
+  --ws-accent-glow: rgba(184, 138, 58, 0.1);
+  --ws-accent-glow-strong: rgba(184, 138, 58, 0.2);
+  --ws-lavender: #7d68b8;
+  --ws-lavender-glow: rgba(125, 104, 184, 0.1);
+  --ws-rose: #c4686a;
+  --ws-mint: #5e9e80;
 
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(145, 128, 200, 0.06) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(226, 176, 74, 0.04) 0%, transparent 50%),
-    var(--ws-bg);
+  /* 背景色由 currentSkin 属性控制（皮肤选择器） */
+  background: transparent;
   color: var(--ws-text);
   pointer-events: auto;
   font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
@@ -255,12 +251,12 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 10px 16px;
-  background: rgba(255, 255, 255, 0.015);
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--ws-border);
   flex-shrink: 0;
   cursor: grab;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 
 .ws-topbar:active {
@@ -326,7 +322,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   border-left: 1px solid var(--ws-border);
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .ws-panel {

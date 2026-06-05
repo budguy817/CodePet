@@ -252,442 +252,156 @@ const toggleReminder = (): void => {
 
 <style scoped>
 /* ========================================
-   WorkForm — 夜曲工作室 暗色主题
+   WorkForm — 半透明卡片风格
    ======================================== */
 
-.work-form {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
+.work-form { height: 100%; display: flex; flex-direction: column; }
 
-/* ===== 头部 ===== */
 .work-form-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: flex; align-items: center; gap: 8px;
   padding: 10px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(140, 120, 170, 0.12);
   flex-shrink: 0;
 }
 
 .work-form-back {
-  padding: 4px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  background: rgba(255, 255, 255, 0.03);
-  color: #6e6e80;
-  border-radius: 7px;
-  font-size: 11px;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
+  padding: 4px 10px; border: 1px solid rgba(140, 120, 170, 0.15);
+  background: rgba(255, 255, 255, 0.4); color: #6e6080;
+  border-radius: 7px; font-size: 11px; cursor: pointer;
+  flex-shrink: 0; transition: all 0.2s ease;
 }
+.work-form-back:hover { background: rgba(255, 255, 255, 0.7); color: #3a2850; }
 
-.work-form-back:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #e4e4ec;
-}
+.work-form-title { font-size: 14px; font-weight: 600; color: #3a2850; }
+.work-form-date { font-size: 11px; color: #8e7ea0; margin-left: auto; }
 
-.work-form-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #e4e4ec;
-}
-
-.work-form-date {
-  font-size: 11px;
-  color: #6e6e80;
-  margin-left: auto;
-}
-
-/* ===== 表单区 ===== */
 .work-form-body {
-  padding: 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex: 1;
-  overflow-y: auto;
+  padding: 14px 16px; display: flex; flex-direction: column;
+  gap: 12px; flex: 1; overflow-y: auto;
 }
-
-.work-form-body--locked {
-  opacity: 0.3;
-  pointer-events: none;
-}
+.work-form-body--locked { opacity: 0.35; pointer-events: none; }
 
 .work-form-label {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 500;
-  color: #6e6e80;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  display: flex; flex-direction: column; gap: 5px;
+  font-size: 11px; font-weight: 500; color: #6e6080;
+  text-transform: uppercase; letter-spacing: 0.04em;
 }
 
-.work-form-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.work-form-label-row { display: flex; align-items: center; justify-content: space-between; }
 
 .work-form-manage-types {
-  border: none;
-  background: none;
-  color: #6e6e80;
-  font-size: 11px;
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.15s;
+  border: none; background: none; color: #8e7ea0;
+  font-size: 11px; cursor: pointer; padding: 2px 6px;
+  border-radius: 4px; transition: all 0.15s;
 }
-
-.work-form-manage-types:hover {
-  color: #e2b04a;
-  background: rgba(226, 176, 74, 0.08);
-}
+.work-form-manage-types:hover { color: #8a6030; background: rgba(184, 138, 58, 0.08); }
 
 .work-form-select,
 .work-form-input {
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9px;
-  font-size: 13px;
-  color: #e4e4ec;
-  background: rgba(255, 255, 255, 0.03);
-  outline: none;
-  transition: all 0.2s ease;
+  padding: 8px 12px; border: 1px solid rgba(140, 120, 170, 0.2);
+  border-radius: 9px; font-size: 13px; color: #3a2850;
+  background: rgba(255, 255, 255, 0.5); outline: none; transition: all 0.2s ease;
 }
-
 .work-form-select:focus,
 .work-form-input:focus,
 .work-form-textarea:focus {
-  border-color: rgba(226, 176, 74, 0.35);
-  box-shadow: 0 0 0 3px rgba(226, 176, 74, 0.06);
+  border-color: rgba(184, 138, 58, 0.4);
+  box-shadow: 0 0 0 3px rgba(184, 138, 58, 0.08);
 }
-
-.work-form-select {
-  cursor: pointer;
-}
-
-.work-form-select option {
-  background: #1a1a2e;
-  color: #e4e4ec;
-}
+.work-form-select { cursor: pointer; }
 
 .work-form-textarea {
-  padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 9px;
-  font-size: 13px;
-  color: #e4e4ec;
-  background: rgba(255, 255, 255, 0.03);
-  outline: none;
-  resize: vertical;
-  font-family: inherit;
-  transition: all 0.2s ease;
+  padding: 8px 12px; border: 1px solid rgba(140, 120, 170, 0.2);
+  border-radius: 9px; font-size: 13px; color: #3a2850;
+  background: rgba(255, 255, 255, 0.5); outline: none;
+  resize: vertical; font-family: inherit; transition: all 0.2s ease;
 }
 
-/* ===== 提醒设置 ===== */
+/* 提醒设置 */
 .work-form-reminder {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; border-radius: 10px;
+  background: rgba(255, 255, 255, 0.3); border: 1px solid rgba(140, 120, 170, 0.1);
 }
-
-.work-form-reminder-label {
-  font-size: 12px;
-  color: #8b8b9e;
-}
-
-.work-form-reminder-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
+.work-form-reminder-label { font-size: 12px; color: #6e6080; }
+.work-form-reminder-controls { display: flex; align-items: center; gap: 8px; }
 .work-form-time-input {
-  padding: 4px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.03);
-  color: #e4e4ec;
-  font-size: 12px;
-  outline: none;
+  padding: 4px 8px; border: 1px solid rgba(140, 120, 170, 0.2);
+  border-radius: 7px; background: rgba(255, 255, 255, 0.5);
+  color: #3a2850; font-size: 12px; outline: none;
 }
-.work-form-time-input:focus {
-  border-color: rgba(226, 176, 74, 0.35);
-}
+.work-form-time-input:focus { border-color: rgba(184, 138, 58, 0.4); }
 
-/* ===== 底部按钮 ===== */
+/* 底部按钮 */
 .work-form-footer {
-  padding: 0 16px 12px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  flex-shrink: 0;
+  padding: 0 16px 12px; display: flex; justify-content: flex-end;
+  gap: 8px; flex-shrink: 0;
 }
-
 .work-form-btn {
-  padding: 7px 20px;
-  border: none;
-  border-radius: 9px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.02em;
+  padding: 7px 20px; border: none; border-radius: 9px;
+  font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s ease; letter-spacing: 0.02em;
 }
-
 .work-form-btn--submit {
-  background: linear-gradient(135deg, rgba(226, 176, 74, 0.85), rgba(201, 154, 58, 0.85));
-  color: #12121d;
-  box-shadow: 0 2px 8px rgba(226, 176, 74, 0.15);
+  background: linear-gradient(135deg, #b88a3a, #9a6e2e);
+  color: #fff; box-shadow: 0 2px 8px rgba(184, 138, 58, 0.2);
 }
-
-.work-form-btn--submit:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(226, 176, 74, 0.25);
-}
-
+.work-form-btn--submit:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(184, 138, 58, 0.3); }
 .work-form-btn--cancel {
-  background: rgba(255, 255, 255, 0.04);
-  color: #8b8b9e;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(140, 120, 170, 0.1); color: #6e6080;
+  border: 1px solid rgba(140, 120, 170, 0.15);
 }
+.work-form-btn--cancel:hover { background: rgba(140, 120, 170, 0.2); color: #3a2850; }
 
-.work-form-btn--cancel:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #e4e4ec;
-}
-
-/* ===== 记录列表 ===== */
+/* 记录列表 */
 .work-form-records {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 16px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  flex-shrink: 0;
+  flex: 1; overflow-y: auto; padding: 0 16px 12px;
+  border-top: 1px solid rgba(140, 120, 170, 0.1); flex-shrink: 0;
 }
-
 .work-form-record {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 12px;
-  margin-top: 6px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 10px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 12px; margin-top: 6px;
+  background: rgba(255, 255, 255, 0.5); border: 1px solid rgba(140, 120, 170, 0.1);
+  border-radius: 10px; font-size: 12px; cursor: pointer; transition: all 0.2s ease;
 }
-
-.work-form-record:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
+.work-form-record:hover { background: rgba(255, 255, 255, 0.7); border-color: rgba(140, 120, 170, 0.2); }
 .work-form-record--editing {
-  background: rgba(145, 128, 200, 0.1);
-  border-color: rgba(145, 128, 200, 0.3);
-  box-shadow: 0 0 12px rgba(145, 128, 200, 0.1);
+  background: rgba(125, 104, 184, 0.1); border-color: rgba(125, 104, 184, 0.3);
+  box-shadow: 0 0 10px rgba(125, 104, 184, 0.1);
 }
+.work-form-record--locked { cursor: default; opacity: 0.5; }
+.work-form-record--locked:hover { background: rgba(255, 255, 255, 0.5); border-color: rgba(140, 120, 170, 0.1); }
 
-.work-form-record--locked {
-  cursor: default;
-  opacity: 0.5;
-}
+.work-record-tag { background: rgba(184, 138, 58, 0.15); color: #8a6030; padding: 2px 8px; border-radius: 5px; font-weight: 500; font-size: 11px; white-space: nowrap; }
+.work-record-urgency { padding: 1px 6px; border-radius: 4px; font-weight: 600; font-size: 10px; white-space: nowrap; }
+.urgency--urgent { background: rgba(196, 104, 106, 0.15); color: #a05052; }
+.urgency--high   { background: rgba(184, 138, 58, 0.15); color: #8a6030; }
+.urgency--mid    { background: rgba(125, 104, 184, 0.12); color: #6e50a8; }
+.urgency--low    { background: rgba(94, 158, 128, 0.12); color: #4a7a60; }
+.work-record-content { flex: 1; color: #5a4068; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.work-record-progress { color: #8e7ea0; white-space: nowrap; font-size: 11px; }
+.work-record-del { border: none; background: none; color: #b0a0c0; font-size: 13px; cursor: pointer; padding: 0 2px; transition: color 0.15s; }
+.work-record-del:hover { color: #c4686a; }
 
-.work-form-record--locked:hover {
-  background: rgba(255, 255, 255, 0.025);
-  border-color: rgba(255, 255, 255, 0.04);
-}
-
-.work-record-tag {
-  background: rgba(226, 176, 74, 0.12);
-  color: #e2b04a;
-  padding: 2px 8px;
-  border-radius: 5px;
-  font-weight: 500;
-  font-size: 11px;
-  white-space: nowrap;
-}
-
-.work-record-urgency {
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-weight: 600;
-  font-size: 10px;
-  white-space: nowrap;
-}
-
-.urgency--urgent { background: rgba(212, 120, 122, 0.15); color: #d4787a; }
-.urgency--high   { background: rgba(226, 176, 74, 0.15); color: #e2b04a; }
-.urgency--mid    { background: rgba(145, 128, 200, 0.12); color: #9180c8; }
-.urgency--low    { background: rgba(110, 184, 154, 0.12); color: #6eb89a; }
-
-.work-record-content {
-  flex: 1;
-  color: #a0a0b4;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.work-record-progress {
-  color: #555568;
-  white-space: nowrap;
-  font-size: 11px;
-}
-
-.work-record-del {
-  border: none;
-  background: none;
-  color: #444456;
-  font-size: 13px;
-  cursor: pointer;
-  padding: 0 2px;
-  transition: color 0.15s;
-}
-
-.work-record-del:hover {
-  color: #d4787a;
-}
-
-/* ===== 全部完成开关 ===== */
+/* 全部完成开关 */
 .work-form-complete {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 0 4px;
-  margin-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  font-size: 12px;
-  font-weight: 500;
-  color: #a0a0b4;
-  cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 0 4px; margin-top: 10px;
+  border-top: 1px solid rgba(140, 120, 170, 0.12);
+  font-size: 12px; font-weight: 500; color: #5a4068; cursor: pointer;
 }
-
 .work-form-switch {
-  width: 40px;
-  height: 22px;
-  border: none;
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.08);
-  cursor: pointer;
-  position: relative;
-  transition: all 0.25s ease;
+  width: 40px; height: 22px; border: none; border-radius: 11px;
+  background: rgba(140, 120, 170, 0.25); cursor: pointer;
+  position: relative; transition: all 0.25s ease;
 }
-
 .work-form-switch::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #6e6e80;
-  transition: all 0.25s ease;
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; transition: all 0.25s ease;
 }
-
-.work-form-switch--on {
-  background: rgba(110, 184, 154, 0.3);
-}
-
-.work-form-switch--on::after {
-  background: #6eb89a;
-  left: 20px;
-}
-
-.work-form-reminder-switch {
-  width: 36px;
-  height: 20px;
-  border-radius: 10px;
-}
-
-.work-form-reminder-switch::after {
-  width: 16px;
-  height: 16px;
-}
-</style>
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s;
-}
-
-.work-form-switch--on {
-  background: #7ec880;
-}
-
-.work-form-switch--on::after {
-  transform: translateX(18px);
-}
-
-/* ========================================
-   每日提醒时间设置
-   ======================================== */
-
-.work-form-reminder {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 8px;
-  margin-top: 4px;
-  border-top: 1px dashed rgba(180, 170, 200, 0.3);
-}
-
-.work-form-reminder-label {
-  font-size: 11px;
-  font-weight: 500;
-  color: #6d5080;
-}
-
-.work-form-reminder-controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.work-form-time-input {
-  padding: 4px 8px;
-  border: 1px solid rgba(180, 170, 200, 0.4);
-  border-radius: 6px;
-  font-size: 12px;
-  color: #4a3060;
-  background: rgba(255, 255, 255, 0.7);
-  outline: none;
-  width: 90px;
-  font-family: inherit;
-  transition: border-color 0.15s;
-}
-
-.work-form-time-input:focus {
-  border-color: #b89ad8;
-}
-
-.work-form-reminder-switch {
-  width: 36px;
-  height: 20px;
-  border-radius: 10px;
-}
-
-.work-form-reminder-switch::after {
-  width: 16px;
-  height: 16px;
-  top: 1.5px;
-  left: 1.5px;
-}
-
-.work-form-reminder-switch.work-form-switch--on::after {
-  transform: translateX(16px);
-}
+.work-form-switch--on { background: rgba(94, 158, 128, 0.4); }
+.work-form-switch--on::after { left: 20px; background: #5e9e80; }
+.work-form-reminder-switch { width: 36px; height: 20px; border-radius: 10px; }
+.work-form-reminder-switch::after { width: 16px; height: 16px; }
 </style>
