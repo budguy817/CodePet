@@ -38,6 +38,9 @@
         <button class="workspace-menu-btn" @click="currentView = 'worklog'">
           📋 工作记录
         </button>
+        <button class="workspace-menu-btn" @click="openTypeManager('menu')">
+          ⚙️ 管理工作类型
+        </button>
       </div>
 
       <!-- 新增工作表单 -->
@@ -45,6 +48,13 @@
         v-else-if="currentView === 'workform'"
         :date="selectedWorkDate"
         @back="currentView = 'menu'"
+        @manage-types="openTypeManager('workform')"
+      />
+
+      <!-- 工作类型管理 -->
+      <WorkTypeManager
+        v-else-if="currentView === 'worktype-manager'"
+        @back="currentView = previousView"
       />
 
       <!-- 工作记录日志 -->
@@ -63,6 +73,7 @@ import { DEFAULT_SKIN } from '@/constants'
 import Calendar from './Calendar.vue'
 import WorkLog from './WorkLog.vue'
 import WorkForm from './WorkForm.vue'
+import WorkTypeManager from './WorkTypeManager.vue'
 import SkinPicker from './SkinPicker.vue'
 
 const petStore = usePetStore()
@@ -80,10 +91,12 @@ watch(currentSkin, (val) => {
   localStorage.setItem(SKIN_KEY, val)
 })
 
-type RightView = 'menu' | 'worklog' | 'workform'
+type RightView = 'menu' | 'worklog' | 'workform' | 'worktype-manager'
 
 /** 右侧面板当前视图 */
 const currentView = ref<RightView>('menu')
+/** 进入类型管理前的上一个视图（用于返回导航） */
+const previousView = ref<RightView>('menu')
 /** 当前选中的工作日期 */
 const selectedWorkDate = ref<Date>(new Date())
 
@@ -125,6 +138,16 @@ const handleClose = (): void => {
 const onDayDblClick = (date: Date): void => {
   selectedWorkDate.value = date
   currentView.value = 'workform'
+}
+
+/**
+ * 打开工作类型管理视图
+ *
+ * 记录来源视图，以便返回时正确导航。
+ */
+const openTypeManager = (from: RightView): void => {
+  previousView.value = from
+  currentView.value = 'worktype-manager'
 }
 
 // ===== 工作提醒横幅 =====

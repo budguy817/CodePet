@@ -5,6 +5,14 @@ import { load } from '@tauri-apps/plugin-store'
 
 // ===== 类型定义 =====
 
+/** 自定义工作类型 */
+export interface WorkType {
+  /** 唯一 ID */
+  id: string
+  /** 类型名称 */
+  label: string
+}
+
 /** 单条工作记录 */
 export interface WorkRecord {
   /** 唯一 ID */
@@ -32,6 +40,8 @@ interface StoredData {
   reminderEnabled: boolean
   /** 最近一次已提醒的日期（YYYY-MM-DD），防止同一天重复提醒 */
   lastRemindedDate: string
+  /** 自定义工作类型列表 */
+  workTypes: WorkType[]
 }
 
 /**
@@ -55,6 +65,16 @@ export const useWorkStore = defineStore('work', () => {
   /** 最近一次已提醒的日期（YYYY-MM-DD），防止同一天重复提醒 */
   const lastRemindedDate = ref<string>('')
 
+  /** 自定义工作类型列表（持久化存储） */
+  const workTypes = ref<WorkType[]>([])
+
+  /** 默认工作类型（首次使用或重置时使用） */
+  const DEFAULT_WORK_TYPES: WorkType[] = [
+    { id: crypto.randomUUID(), label: '会议' },
+    { id: crypto.randomUUID(), label: '开发' },
+    { id: crypto.randomUUID(), label: '改bug' },
+  ]
+
   // ===== 持久化（tauri-plugin-store） =====
   let storePromise: ReturnType<typeof load> | null = null
 
@@ -76,6 +96,10 @@ export const useWorkStore = defineStore('work', () => {
         reminderTime.value = data.reminderTime || '17:50'
         reminderEnabled.value = data.reminderEnabled ?? true
         lastRemindedDate.value = data.lastRemindedDate || ''
+        workTypes.value = data.workTypes || [...DEFAULT_WORK_TYPES]
+      } else {
+        // 首次使用：初始化默认工作类型
+        workTypes.value = [...DEFAULT_WORK_TYPES]
       }
     } catch (e) {
       console.warn('[CodePet] 加载工作记录失败:', e)
@@ -94,6 +118,7 @@ export const useWorkStore = defineStore('work', () => {
         reminderTime: reminderTime.value,
         reminderEnabled: reminderEnabled.value,
         lastRemindedDate: lastRemindedDate.value,
+        workTypes: workTypes.value,
       })
       await store.save()
     } catch (e) {
@@ -220,6 +245,79 @@ export const useWorkStore = defineStore('work', () => {
     return true
   }
 
+  // ===== 自定义工作类型管理 =====
+
+  /**
+   * 新增工作类型
+   *
+   * @param label - 类型名称（不能与已有类型重名）
+   * @returns 新创建的类型对象
+   */
+  const addWorkType = async (label: string): Promise<WorkType> => {
+    // 去除首尾空格
+    const trimmed = label.trim()
+    // 重名校验
+    if (workTypes.value.some((t) => t.label === trimmed)) {
+      throw new Error(`工作类型"${trimmed}"已存在`)
+    }
+    const newType: WorkType = {
+      id: crypto.randomUUID(),
+      label: trimmed,
+    }
+    workTypes.value.push(newType)
+    await saveToDisk()
+    return newType
+  }
+
+  /**
+   * 修改工作类型名称
+   *
+   * 修改后，所有使用旧名称的工作记录会自动更新为新的类型名称。
+   *
+   * @param id - 类型 ID
+   * @param newLabel - 新名称（不能与已有类型重名）
+   */
+  const updateWorkType = async (id: string, newLabel: string): Promise<void> => {
+    const trimmed = newLabel.trim()
+    const type = workTypes.value.find((t) => t.id === id)
+    if (!type) throw new Error('工作类型不存在')
+    // 重名校验（排除自身）
+    if (workTypes.value.some((t) => t.id !== id && t.label === trimmed)) {
+      throw new Error(`工作类型"${trimmed}"已存在`)
+    }
+    const oldLabel = type.label
+    type.label = trimmed
+    // 更新所有使用旧名称的工作记录
+    records.value.forEach((r) => {
+      if (r.type === oldLabel) {
+        r.type = trimmed
+      }
+    })
+    await saveToDisk()
+  }
+
+  /**
+   * 删除工作类型
+   *
+   * 已有工作记录中仍会保留该类型名称（不会丢失历史数据），
+   * 只是下拉菜单中不再显示该选项。
+   *
+   * @param id - 类型 ID
+   */
+  const deleteWorkType = async (id: string): Promise<void> => {
+    const idx = workTypes.value.findIndex((t) => t.id === id)
+    if (idx === -1) throw new Error('工作类型不存在')
+    workTypes.value.splice(idx, 1)
+    await saveToDisk()
+  }
+
+  /**
+   * 获取仅包含标签名的工作类型列表（供表单下拉使用）
+   */
+  const workTypeLabels = computed(() =>
+    workTypes.value.map((t) => t.label)
+  )
+
   // 启动时加载
   loadFromDisk()
 
@@ -245,5 +343,11 @@ export const useWorkStore = defineStore('work', () => {
     markRemindedToday,
     isRemindedToday,
     hasIncompleteWorkToday,
+    // 自定义工作类型
+    workTypes,
+    workTypeLabels,
+    addWorkType,
+    updateWorkType,
+    deleteWorkType,
   }
 })

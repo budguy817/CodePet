@@ -16,10 +16,25 @@
     <div class="work-form-body" :class="{ 'work-form-body--locked': isDateCompleted }">
       <!-- 工作类型 -->
       <label class="work-form-label">
-        工作类型
+        <div class="work-form-label-row">
+          <span>工作类型</span>
+          <button
+            class="work-form-manage-types"
+            title="管理工作类型"
+            @click="$emit('manageTypes')"
+          >
+            ⚙️ 管理
+          </button>
+        </div>
         <select v-model="form.type" class="work-form-select">
           <option value="">请选择</option>
-          <option v-for="t in workTypes" :key="t" :value="t">{{ t }}</option>
+          <option
+            v-for="t in workStore.workTypes"
+            :key="t.id"
+            :value="t.label"
+          >
+            {{ t.label }}
+          </option>
         </select>
       </label>
 
@@ -128,16 +143,17 @@ const props = defineProps<Props>()
 defineEmits<{
   /** 返回上一级 */
   back: []
+  /** 打开工作类型管理 */
+  manageTypes: []
 }>()
 
 // ===== Store =====
 const workStore = useWorkStore()
 
-import { WORK_TYPES, URGENCY_LEVELS } from '@/constants'
+import { URGENCY_LEVELS } from '@/constants'
 import { urgencyClass } from '@/utils/urgency'
 
 // ===== 常量 =====
-const workTypes = WORK_TYPES
 const urgencyLevels = URGENCY_LEVELS
 
 // ===== 表单数据 =====
