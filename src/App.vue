@@ -11,6 +11,9 @@
   <Pet v-if="petStore.appMode === 'pet'" />
   <Workspace v-else-if="petStore.appMode === 'workspace'" />
   <Chat v-else />
+
+  <!-- 全局自动更新对话框 -->
+  <UpdateDialog />
 </template>
 
 <script setup lang="ts">
@@ -20,6 +23,7 @@ import { usePetStore } from '@/stores/petStore'
 import Pet from './components/Pet.vue'
 import Workspace from './components/Workspace.vue'
 import Chat from './components/Chat.vue'
+import UpdateDialog from './components/UpdateDialog.vue'
 
 const petStore = usePetStore()
 const appWindow = getCurrentWindow()

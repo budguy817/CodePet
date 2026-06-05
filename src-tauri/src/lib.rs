@@ -96,11 +96,12 @@ fn show_window(app: tauri::AppHandle) -> Result<(), String> {
 /// 这些 ID 与托盘菜单项一一对应，
 /// 用于在 on_menu_event 回调中识别用户点击了哪个菜单项。
 mod tray_menu_ids {
-    pub const SHOW: &str = "tray_show";       // 显示宠物
-    pub const HIDE: &str = "tray_hide";       // 隐藏宠物
+    pub const SHOW: &str = "tray_show";           // 显示宠物
+    pub const HIDE: &str = "tray_hide";           // 隐藏宠物
     pub const WORKSPACE: &str = "tray_workspace"; // 工作台
-    pub const CHAT: &str = "tray_chat";       // 智能问答
-    pub const QUIT: &str = "tray_quit";       // 退出
+    pub const CHAT: &str = "tray_chat";           // 智能问答
+    pub const CHECK_UPDATE: &str = "tray_check_update"; // 检查更新
+    pub const QUIT: &str = "tray_quit";           // 退出
 }
 
 /// 构建系统托盘菜单
@@ -120,6 +121,8 @@ fn build_tray_menu(app: &tauri::AppHandle) -> Result<tauri::menu::Menu<tauri::Wr
         .build(app)?;
     let chat_item = MenuItemBuilder::with_id(tray_menu_ids::CHAT, "智能问答")
         .build(app)?;
+    let check_update_item = MenuItemBuilder::with_id(tray_menu_ids::CHECK_UPDATE, "检查更新")
+        .build(app)?;
     let quit_item = MenuItemBuilder::with_id(tray_menu_ids::QUIT, "退出")
         .build(app)?;
 
@@ -129,6 +132,8 @@ fn build_tray_menu(app: &tauri::AppHandle) -> Result<tauri::menu::Menu<tauri::Wr
         .separator()
         .item(&workspace_item)
         .item(&chat_item)
+        .separator()
+        .item(&check_update_item)
         .separator()
         .item(&quit_item)
         .build()?;
@@ -197,6 +202,14 @@ fn create_tray(
                     // 切换到智能问答模式
                     emit_mode_switch(app, "chat");
                 }
+                tray_menu_ids::CHECK_UPDATE => {
+                    // 向前端发送"检查更新"事件，由前端 useUpdater composable 处理
+                    if let Some(window) = app.get_webview_window("main") {
+                        let _ = window.show();
+                        let _ = window.set_focus();
+                        let _ = window.emit("check-update", ());
+                    }
+                }
                 tray_menu_ids::QUIT => {
                     // 彻底退出应用
                     app.exit(0);
@@ -237,6 +250,7 @@ fn create_tray(
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_store::Builder::default().build())
+        .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(|app| {
             let handle = app.handle();
 
