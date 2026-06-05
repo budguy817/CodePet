@@ -236,46 +236,49 @@ const setEditInputRef = (el: HTMLInputElement | null): void => {
 </script>
 
 <style scoped>
-/* ===== 容器 ===== */
+/* ========================================
+   WorkTypeManager — 夜曲工作室 暗色主题
+   ======================================== */
+
 .work-type-manager {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 16px 20px;
-  gap: 12px;
+  padding: 12px 16px 16px;
+  gap: 10px;
   overflow-y: auto;
 }
 
-/* ===== 顶部导航 ===== */
+/* ===== 顶部 ===== */
 .wtm-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 4px;
+  gap: 10px;
+  margin-bottom: 2px;
 }
 
 .wtm-back {
   padding: 4px 10px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #a6adc8;
-  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #6e6e80;
+  font-size: 11px;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
 }
 .wtm-back:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #cdd6f4;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e4e4ec;
 }
 
 .wtm-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
-  color: #cdd6f4;
+  color: #e4e4ec;
 }
 
-/* ===== 新增区域 ===== */
+/* ===== 新增区 ===== */
 .wtm-add-section {
   display: flex;
   gap: 8px;
@@ -284,61 +287,63 @@ const setEditInputRef = (el: HTMLInputElement | null): void => {
 .wtm-input {
   flex: 1;
   padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.04);
-  color: #cdd6f4;
-  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #e4e4ec;
+  font-size: 13px;
   outline: none;
-  transition: border-color 0.15s;
+  transition: all 0.2s ease;
 }
 .wtm-input:focus {
-  border-color: rgba(137, 180, 250, 0.5);
+  border-color: rgba(226, 176, 74, 0.35);
+  box-shadow: 0 0 0 3px rgba(226, 176, 74, 0.06);
 }
 .wtm-input::placeholder {
-  color: #585b70;
+  color: #444456;
 }
 
 .wtm-btn {
-  padding: 8px 16px;
+  padding: 8px 18px;
   border: none;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
   white-space: nowrap;
 }
 
 .wtm-btn--add {
-  background: linear-gradient(135deg, #89b4fa, #cba6f7);
-  color: #1e1e2e;
+  background: linear-gradient(135deg, rgba(226, 176, 74, 0.85), rgba(201, 154, 58, 0.85));
+  color: #12121d;
+  box-shadow: 0 2px 8px rgba(226, 176, 74, 0.15);
 }
 .wtm-btn--add:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(137, 180, 250, 0.3);
+  box-shadow: 0 4px 16px rgba(226, 176, 74, 0.25);
 }
 .wtm-btn--add:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 /* ===== 错误提示 ===== */
 .wtm-error {
   padding: 8px 12px;
-  background: rgba(243, 139, 168, 0.12);
-  border: 1px solid rgba(243, 139, 168, 0.3);
-  border-radius: 10px;
-  color: #f38ba8;
-  font-size: 13px;
+  background: rgba(212, 120, 122, 0.1);
+  border: 1px solid rgba(212, 120, 122, 0.2);
+  border-radius: 9px;
+  color: #d4787a;
+  font-size: 12px;
 }
 
-/* ===== 类型列表 ===== */
+/* ===== 列表 ===== */
 .wtm-list {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   overflow-y: auto;
 }
 
@@ -347,32 +352,38 @@ const setEditInputRef = (el: HTMLInputElement | null): void => {
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.wtm-item:hover {
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .wtm-item-label {
   flex: 1;
-  font-size: 14px;
-  color: #cdd6f4;
+  font-size: 13px;
+  color: #e4e4ec;
 }
 
 .wtm-edit-input {
   flex: 1;
   padding: 4px 8px;
-  border: 1px solid rgba(137, 180, 250, 0.5);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.06);
-  color: #cdd6f4;
-  font-size: 14px;
+  border: 1px solid rgba(226, 176, 74, 0.35);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #e4e4ec;
+  font-size: 13px;
   outline: none;
 }
 
 /* ===== 操作按钮 ===== */
 .wtm-actions {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   flex-shrink: 0;
 }
 
@@ -383,57 +394,40 @@ const setEditInputRef = (el: HTMLInputElement | null): void => {
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 8px;
+  border-radius: 7px;
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
-.wtm-action--edit {
-  color: #a6adc8;
-}
-.wtm-action--edit:hover {
-  background: rgba(137, 180, 250, 0.15);
-  color: #89b4fa;
-}
+.wtm-action--edit { color: #6e6e80; }
+.wtm-action--edit:hover { background: rgba(145, 128, 200, 0.12); color: #9180c8; }
 
-.wtm-action--delete {
-  color: #a6adc8;
-}
-.wtm-action--delete:hover {
-  background: rgba(243, 139, 168, 0.15);
-  color: #f38ba8;
-}
+.wtm-action--delete { color: #555568; }
+.wtm-action--delete:hover { background: rgba(212, 120, 122, 0.12); color: #d4787a; }
 
-.wtm-action--save {
-  color: #a6e3a1;
-}
-.wtm-action--save:hover {
-  background: rgba(166, 227, 161, 0.15);
-}
+.wtm-action--save { color: #6eb89a; }
+.wtm-action--save:hover { background: rgba(110, 184, 154, 0.12); }
 
-.wtm-action--cancel {
-  color: #f38ba8;
-}
-.wtm-action--cancel:hover {
-  background: rgba(243, 139, 168, 0.15);
-}
+.wtm-action--cancel { color: #d4787a; }
+.wtm-action--cancel:hover { background: rgba(212, 120, 122, 0.12); }
 
 /* ===== 空状态 ===== */
 .wtm-empty {
   text-align: center;
-  color: #6c7086;
-  font-size: 14px;
+  color: #444456;
+  font-size: 13px;
   padding: 32px 0;
 }
 
 /* ===== 底部提示 ===== */
 .wtm-hint {
-  font-size: 12px;
-  color: #6c7086;
+  font-size: 11px;
+  color: #444456;
   text-align: center;
   padding-top: 4px;
+  line-height: 1.4;
 }
 
 /* ===== 过渡动画 ===== */
@@ -447,21 +441,9 @@ const setEditInputRef = (el: HTMLInputElement | null): void => {
   transform: translateY(-4px);
 }
 
-.wtm-list-item-enter-active {
-  transition: all 0.3s ease;
-}
-.wtm-list-item-leave-active {
-  transition: all 0.2s ease;
-}
-.wtm-list-item-enter-from {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-.wtm-list-item-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-.wtm-list-item-move {
-  transition: transform 0.25s ease;
-}
+.wtm-list-item-enter-active { transition: all 0.3s ease; }
+.wtm-list-item-leave-active { transition: all 0.2s ease; }
+.wtm-list-item-enter-from { opacity: 0; transform: translateX(-16px); }
+.wtm-list-item-leave-to { opacity: 0; transform: translateX(16px); }
+.wtm-list-item-move { transition: transform 0.25s ease; }
 </style>

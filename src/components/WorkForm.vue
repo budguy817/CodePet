@@ -251,232 +251,327 @@ const toggleReminder = (): void => {
 </script>
 
 <style scoped>
+/* ========================================
+   WorkForm — 夜曲工作室 暗色主题
+   ======================================== */
+
 .work-form {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.6);
 }
 
+/* ===== 头部 ===== */
 .work-form-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(180, 170, 200, 0.2);
-}
-
-.work-form-back {
-  padding: 3px 10px;
-  border: none;
-  background: rgba(200, 190, 220, 0.3);
-  color: #6d5080;
-  border-radius: 6px;
-  font-size: 11px;
-  cursor: pointer;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
 
+.work-form-back {
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: #6e6e80;
+  border-radius: 7px;
+  font-size: 11px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
 .work-form-back:hover {
-  background: rgba(200, 190, 220, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e4e4ec;
 }
 
 .work-form-title {
   font-size: 14px;
   font-weight: 600;
-  color: #4a3060;
+  color: #e4e4ec;
 }
 
 .work-form-date {
   font-size: 11px;
-  color: #9a80b8;
+  color: #6e6e80;
+  margin-left: auto;
 }
 
-/* 表单区 */
+/* ===== 表单区 ===== */
 .work-form-body {
-  padding: 12px 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .work-form-body--locked {
-  opacity: 0.45;
+  opacity: 0.3;
   pointer-events: none;
 }
 
 .work-form-label {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   font-size: 11px;
   font-weight: 500;
-  color: #6d5080;
+  color: #6e6e80;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.work-form-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.work-form-manage-types {
+  border: none;
+  background: none;
+  color: #6e6e80;
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+
+.work-form-manage-types:hover {
+  color: #e2b04a;
+  background: rgba(226, 176, 74, 0.08);
 }
 
 .work-form-select,
 .work-form-input {
-  padding: 6px 10px;
-  border: 1px solid rgba(180, 170, 200, 0.4);
-  border-radius: 8px;
-  font-size: 12px;
-  color: #4a3060;
-  background: rgba(255, 255, 255, 0.7);
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  font-size: 13px;
+  color: #e4e4ec;
+  background: rgba(255, 255, 255, 0.03);
   outline: none;
-  transition: border-color 0.15s;
+  transition: all 0.2s ease;
 }
 
 .work-form-select:focus,
 .work-form-input:focus,
 .work-form-textarea:focus {
-  border-color: #b89ad8;
+  border-color: rgba(226, 176, 74, 0.35);
+  box-shadow: 0 0 0 3px rgba(226, 176, 74, 0.06);
+}
+
+.work-form-select {
+  cursor: pointer;
+}
+
+.work-form-select option {
+  background: #1a1a2e;
+  color: #e4e4ec;
 }
 
 .work-form-textarea {
-  padding: 6px 10px;
-  border: 1px solid rgba(180, 170, 200, 0.4);
-  border-radius: 8px;
-  font-size: 12px;
-  color: #4a3060;
-  background: rgba(255, 255, 255, 0.7);
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  font-size: 13px;
+  color: #e4e4ec;
+  background: rgba(255, 255, 255, 0.03);
   outline: none;
   resize: vertical;
   font-family: inherit;
+  transition: all 0.2s ease;
 }
 
+/* ===== 提醒设置 ===== */
+.work-form-reminder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.work-form-reminder-label {
+  font-size: 12px;
+  color: #8b8b9e;
+}
+
+.work-form-reminder-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.work-form-time-input {
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #e4e4ec;
+  font-size: 12px;
+  outline: none;
+}
+.work-form-time-input:focus {
+  border-color: rgba(226, 176, 74, 0.35);
+}
+
+/* ===== 底部按钮 ===== */
 .work-form-footer {
-  padding: 0 14px 10px;
+  padding: 0 16px 12px;
   display: flex;
   justify-content: flex-end;
-  gap: 6px;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .work-form-btn {
-  padding: 6px 18px;
+  padding: 7px 20px;
   border: none;
-  border-radius: 8px;
+  border-radius: 9px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
 }
 
 .work-form-btn--submit {
-  background: #b89ad8;
-  color: #fff;
+  background: linear-gradient(135deg, rgba(226, 176, 74, 0.85), rgba(201, 154, 58, 0.85));
+  color: #12121d;
+  box-shadow: 0 2px 8px rgba(226, 176, 74, 0.15);
 }
 
 .work-form-btn--submit:hover {
-  background: #a080c8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(226, 176, 74, 0.25);
 }
 
 .work-form-btn--cancel {
-  background: rgba(200, 190, 220, 0.35);
-  color: #7d6090;
+  background: rgba(255, 255, 255, 0.04);
+  color: #8b8b9e;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .work-form-btn--cancel:hover {
-  background: rgba(200, 190, 220, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e4e4ec;
 }
 
-/* 记录列表 */
+/* ===== 记录列表 ===== */
 .work-form-records {
   flex: 1;
   overflow-y: auto;
-  padding: 0 14px 10px;
-  border-top: 1px solid rgba(180, 170, 200, 0.15);
+  padding: 0 16px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
 }
 
 .work-form-record {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
+  gap: 8px;
+  padding: 9px 12px;
   margin-top: 6px;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 8px;
-  font-size: 11px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  font-size: 12px;
   cursor: pointer;
-  transition: background 0.12s;
+  transition: all 0.2s ease;
 }
 
 .work-form-record:hover {
-  background: rgba(220, 210, 240, 0.4);
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .work-form-record--editing {
-  background: rgba(200, 180, 230, 0.45);
-  box-shadow: inset 0 0 0 1.5px #b89ad8;
+  background: rgba(145, 128, 200, 0.1);
+  border-color: rgba(145, 128, 200, 0.3);
+  box-shadow: 0 0 12px rgba(145, 128, 200, 0.1);
 }
 
 .work-form-record--locked {
   cursor: default;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 .work-form-record--locked:hover {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.025);
+  border-color: rgba(255, 255, 255, 0.04);
 }
 
 .work-record-tag {
-  background: rgba(180, 160, 210, 0.3);
-  color: #5d4070;
-  padding: 1px 8px;
-  border-radius: 4px;
+  background: rgba(226, 176, 74, 0.12);
+  color: #e2b04a;
+  padding: 2px 8px;
+  border-radius: 5px;
   font-weight: 500;
+  font-size: 11px;
   white-space: nowrap;
 }
 
 .work-record-urgency {
   padding: 1px 6px;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 10px;
   white-space: nowrap;
 }
 
-.urgency--urgent { background: rgba(240, 130, 130, 0.25); color: #c0392b; }
-.urgency--high   { background: rgba(240, 180, 130, 0.25); color: #c07030; }
-.urgency--mid    { background: rgba(200, 200, 140, 0.25); color: #808020; }
-.urgency--low    { background: rgba(180, 210, 180, 0.25); color: #508050; }
+.urgency--urgent { background: rgba(212, 120, 122, 0.15); color: #d4787a; }
+.urgency--high   { background: rgba(226, 176, 74, 0.15); color: #e2b04a; }
+.urgency--mid    { background: rgba(145, 128, 200, 0.12); color: #9180c8; }
+.urgency--low    { background: rgba(110, 184, 154, 0.12); color: #6eb89a; }
 
 .work-record-content {
   flex: 1;
-  color: #6d5080;
+  color: #a0a0b4;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .work-record-progress {
-  color: #9a80b8;
+  color: #555568;
   white-space: nowrap;
+  font-size: 11px;
 }
 
 .work-record-del {
   border: none;
   background: none;
-  color: #c8b0d8;
-  font-size: 12px;
+  color: #444456;
+  font-size: 13px;
   cursor: pointer;
   padding: 0 2px;
+  transition: color 0.15s;
 }
 
 .work-record-del:hover {
-  color: #a080b8;
+  color: #d4787a;
 }
 
-/* 全部完成开关 */
+/* ===== 全部完成开关 ===== */
 .work-form-complete {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 0 4px;
-  margin-top: 8px;
-  border-top: 1px solid rgba(180, 170, 200, 0.2);
+  padding: 12px 0 4px;
+  margin-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 12px;
   font-weight: 500;
-  color: #4a3060;
+  color: #a0a0b4;
   cursor: pointer;
 }
 
@@ -485,10 +580,10 @@ const toggleReminder = (): void => {
   height: 22px;
   border: none;
   border-radius: 11px;
-  background: rgba(180, 170, 200, 0.4);
+  background: rgba(255, 255, 255, 0.08);
   cursor: pointer;
   position: relative;
-  transition: background 0.2s;
+  transition: all 0.25s ease;
 }
 
 .work-form-switch::after {
@@ -498,6 +593,31 @@ const toggleReminder = (): void => {
   left: 2px;
   width: 18px;
   height: 18px;
+  border-radius: 50%;
+  background: #6e6e80;
+  transition: all 0.25s ease;
+}
+
+.work-form-switch--on {
+  background: rgba(110, 184, 154, 0.3);
+}
+
+.work-form-switch--on::after {
+  background: #6eb89a;
+  left: 20px;
+}
+
+.work-form-reminder-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.work-form-reminder-switch::after {
+  width: 16px;
+  height: 16px;
+}
+</style>
   border-radius: 50%;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);

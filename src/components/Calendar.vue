@@ -396,79 +396,92 @@ const onDayLeave = (): void => {
 </script>
 
 <style scoped>
+/* ========================================
+   Calendar — 夜曲工作室 暗色主题
+   ======================================== */
+
 .calendar {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.92);
-  border-radius: 12px;
-  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  padding: 14px;
   user-select: none;
 }
 
-/* 头部导航 */
+/* ===== 头部导航 ===== */
 .calendar-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .calendar-nav-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: rgba(200, 190, 220, 0.3);
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
   border-radius: 8px;
   font-size: 11px;
-  color: #6d5080;
+  color: #6e6e80;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
   flex-shrink: 0;
 }
 
 .calendar-nav-btn:hover {
-  background: rgba(200, 190, 220, 0.55);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e4e4ec;
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .calendar-title {
   font-size: 15px;
   font-weight: 600;
-  color: #4a3060;
+  color: #e4e4ec;
+  letter-spacing: 0.02em;
 }
 
 .calendar-title-lunar {
   font-size: 12px;
   font-weight: 400;
-  color: #9a80b8;
+  color: #6e6e80;
+  margin-left: 4px;
 }
 
-/* 星期表头 */
+/* ===== 星期表头 ===== */
 .calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   margin-bottom: 4px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .calendar-weekday {
   text-align: center;
-  font-size: 11px;
-  font-weight: 500;
-  color: #9a80b8;
-  padding: 4px 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: #444456;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 0;
 }
 
-/* 日期网格 */
+/* ===== 日期网格 ===== */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(6, 1fr);
   flex: 1;
-  gap: 1px;
+  gap: 2px;
 }
 
 .calendar-day {
@@ -477,71 +490,97 @@ const onDayLeave = (): void => {
   align-items: center;
   justify-content: flex-start;
   cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.12s;
+  border-radius: 8px;
+  transition: all 0.15s ease;
   position: relative;
-  padding: 2px 1px;
+  padding: 3px 1px;
   min-height: 0;
 }
 
 .calendar-day:hover:not(.calendar-day--other-month) {
-  background: rgba(200, 190, 220, 0.25);
+  background: rgba(255, 255, 255, 0.05);
+  transform: scale(1.03);
 }
 
 .calendar-day--other-month {
   cursor: default;
+  opacity: 0.25;
 }
 
-/* 公历日期数字 */
+/* ===== 公历日期数字 ===== */
 .calendar-day-num {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
-  color: #5d4070;
-  width: 26px;
-  height: 26px;
+  color: #c8c8d4;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: all 0.15s;
+  transition: all 0.2s ease;
   flex-shrink: 0;
   line-height: 1;
 }
 
-.calendar-day--other-month .calendar-day-num {
-  color: #ccc;
-}
-
-/* 今日（高优先级） */
+/* 今日 —— 琥珀色高亮 */
 .calendar-day--today .calendar-day-num {
-  background: rgba(200, 180, 220, 0.45);
+  background: rgba(226, 176, 74, 0.2);
   font-weight: 700;
-  color: #4a3060;
+  color: #e2b04a;
+  box-shadow: 0 0 12px rgba(226, 176, 74, 0.15);
 }
 
-/* 有工作记录（黄色）——整个日期背景 */
+/* 有工作记录 —— 淡金色背景 */
 .calendar-day--has-work {
-  background: rgba(250, 220, 140, 0.4);
+  background: rgba(226, 176, 74, 0.1);
+  position: relative;
 }
 
-/* 全部完成（绿色）——整个日期背景 */
+.calendar-day--has-work::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(226, 176, 74, 0.7);
+}
+
+/* 全部完成 —— 淡绿色背景 */
 .calendar-day--completed {
-  background: rgba(140, 210, 160, 0.4);
+  background: rgba(110, 184, 154, 0.12);
+  position: relative;
+}
+
+.calendar-day--completed::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(110, 184, 154, 0.7);
 }
 
 /* 选中 */
 .calendar-day--selected .calendar-day-num {
-  background: #b89ad8;
-  color: #fff;
+  background: rgba(145, 128, 200, 0.35);
+  color: #c8bef0;
   font-weight: 600;
+  box-shadow: 0 0 12px rgba(145, 128, 200, 0.2);
 }
 
 /* ===== 农历/节日文字 ===== */
 .calendar-day-lunar {
-  font-size: 10px;
-  color: #b0a0c8;
+  font-size: 9px;
+  color: #555568;
   line-height: 1.2;
-  margin-top: -1px;
+  margin-top: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -549,135 +588,121 @@ const onDayLeave = (): void => {
   text-align: center;
 }
 
-/* 节日/节气高亮文字 */
 .calendar-day-lunar--badge {
-  color: #e87848;
+  color: #d4787a;
   font-weight: 600;
 }
 
 .calendar-day--term .calendar-day-lunar {
-  color: #4a9e6b;
+  color: #6eb89a;
 }
 
 .calendar-day--rest .calendar-day-lunar {
-  color: #d44848;
+  color: #d4787a;
   font-weight: 700;
 }
 
-/* 节假日小圆点 */
+/* ===== 节假日小圆点 ===== */
 .calendar-day-dot {
   position: absolute;
-  top: 3px;
+  top: 2px;
   right: 3px;
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: #e87848;
+  background: #d4787a;
 }
 
 .calendar-day-dot--rest {
-  background: #d44848;
-  box-shadow: 0 0 3px rgba(212, 72, 72, 0.5);
+  background: #d4787a;
+  box-shadow: 0 0 4px rgba(212, 120, 122, 0.5);
 }
 
 .calendar-day-dot--term {
-  background: #4a9e6b;
+  background: #6eb89a;
 }
 </style>
 
 <!-- ===== 全局浮框样式（非 scoped，因为用了 Teleport 到 body） ===== -->
 <style>
-/* Hover 宜忌浮框 */
 .calendar-tooltip {
   position: fixed;
   z-index: 99999;
   min-width: 180px;
   max-width: 230px;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(180, 160, 210, 0.4);
-  border-radius: 10px;
-  padding: 12px 14px;
-  box-shadow: 0 8px 24px rgba(100, 80, 140, 0.18);
+  background: rgba(22, 22, 36, 0.97);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
   pointer-events: none;
-  animation: calendar-tooltip-in 0.15s ease-out;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
-    'Microsoft YaHei', sans-serif;
+  animation: calendar-tooltip-in 0.18s ease-out;
+  font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
 }
 
 @keyframes calendar-tooltip-in {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(4px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* 浮框头部 */
 .calendar-tooltip-header {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .calendar-tooltip-date {
   font-size: 14px;
   font-weight: 600;
-  color: #4a3060;
+  color: #e4e4ec;
 }
 
 .calendar-tooltip-lunar {
-  font-size: 12px;
-  color: #9a80b8;
+  font-size: 11px;
+  color: #6e6e80;
 }
 
-/* 干支 & 建除 */
 .calendar-tooltip-ganzhi {
   font-size: 11px;
-  color: #b0a0c8;
+  color: #555568;
   margin-bottom: 4px;
 }
 
-/* 节日标签行 */
 .calendar-tooltip-holidays {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
 
 .calendar-tooltip-holiday-tag {
   font-size: 10px;
   padding: 1px 6px;
-  border-radius: 10px;
-  background: rgba(232, 120, 72, 0.12);
-  color: #d06838;
+  border-radius: 8px;
+  background: rgba(226, 176, 74, 0.12);
+  color: #e2b04a;
   font-weight: 500;
 }
 
 .calendar-tooltip-holiday-tag--rest {
-  background: rgba(212, 72, 72, 0.12);
-  color: #c43838;
+  background: rgba(212, 120, 122, 0.12);
+  color: #d4787a;
 }
 
 .calendar-tooltip-holiday-tag--term {
-  background: rgba(74, 158, 107, 0.12);
-  color: #3a8058;
+  background: rgba(110, 184, 154, 0.12);
+  color: #6eb89a;
 }
 
-/* 分割线 */
 .calendar-tooltip-divider {
   height: 1px;
-  background: rgba(180, 160, 210, 0.25);
+  background: rgba(255, 255, 255, 0.06);
   margin: 6px 0;
 }
 
-/* 宜忌行 */
 .calendar-tooltip-almanac {
   display: flex;
   flex-direction: column;
@@ -704,16 +729,11 @@ const onDayLeave = (): void => {
   color: #fff;
 }
 
-.calendar-tooltip-label--yi {
-  background: #7ec88a;
-}
-
-.calendar-tooltip-label--ji {
-  background: #e08880;
-}
+.calendar-tooltip-label--yi { background: #6eb89a; }
+.calendar-tooltip-label--ji { background: #d4787a; }
 
 .calendar-tooltip-text {
-  color: #5d4070;
+  color: #a0a0b4;
   line-height: 1.5;
 }
 </style>

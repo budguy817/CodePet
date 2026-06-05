@@ -95,159 +95,189 @@ const filteredRecords = computed<WorkRecord[]>(() => {
 </script>
 
 <style scoped>
+/* ========================================
+   WorkLog — 夜曲工作室 暗色主题
+   ======================================== */
+
 .work-log {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
+/* ===== 头部 ===== */
 .work-log-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(180, 170, 200, 0.2);
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
 
 .work-log-title {
   font-size: 14px;
   font-weight: 600;
-  color: #4a3060;
+  color: #e4e4ec;
 }
 
 .work-log-back {
   padding: 4px 12px;
-  border: none;
-  background: rgba(200, 190, 220, 0.3);
-  color: #6d5080;
-  border-radius: 8px;
-  font-size: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  color: #6e6e80;
+  border-radius: 7px;
+  font-size: 11px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
 }
 
 .work-log-back:hover {
-  background: rgba(200, 190, 220, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e4e4ec;
 }
 
-/* 筛选区 */
+/* ===== 筛选区 ===== */
 .work-log-filter {
-  padding: 8px 14px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 6px;
   flex-wrap: wrap;
-  border-bottom: 1px solid rgba(180, 170, 200, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   flex-shrink: 0;
 }
 
 .work-log-filter-select {
-  padding: 3px 8px;
-  border: 1px solid rgba(180, 170, 200, 0.4);
-  border-radius: 6px;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
   font-size: 11px;
-  color: #4a3060;
-  background: rgba(255, 255, 255, 0.7);
+  color: #e4e4ec;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.work-log-filter-select option {
+  background: #1a1a2e;
+  color: #e4e4ec;
 }
 
 .work-log-filter-input {
-  padding: 3px 6px;
-  border: 1px solid rgba(180, 170, 200, 0.4);
-  border-radius: 6px;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
   font-size: 11px;
-  color: #4a3060;
-  background: rgba(255, 255, 255, 0.7);
-  width: 105px;
+  color: #e4e4ec;
+  background: rgba(255, 255, 255, 0.03);
+  width: 110px;
+  outline: none;
+}
+.work-log-filter-input:focus {
+  border-color: rgba(226, 176, 74, 0.35);
 }
 
 .work-log-filter-sep {
   font-size: 11px;
-  color: #9a80b8;
+  color: #444456;
 }
 
-/* 记录列表 */
+/* ===== 列表 ===== */
 .work-log-list {
   flex: 1;
   overflow-y: auto;
-  padding: 8px;
+  padding: 8px 16px 12px;
 }
 
 .work-log-empty {
   text-align: center;
-  color: #b8a0d0;
+  color: #444456;
   font-size: 13px;
-  padding: 30px 0;
+  padding: 40px 0;
 }
 
 .work-log-item {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 10px;
-  padding: 8px 10px;
-  margin-bottom: 6px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.work-log-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .work-log-item-head {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 8px;
+  margin-bottom: 5px;
 }
 
 .work-log-item-date {
   font-size: 11px;
-  color: #9a80b8;
+  color: #555568;
   font-weight: 500;
+  font-variant-numeric: tabular-nums;
 }
 
 .work-log-item-tag {
-  font-size: 11px;
-  background: rgba(180, 160, 210, 0.3);
-  color: #5d4070;
+  background: rgba(226, 176, 74, 0.12);
+  color: #e2b04a;
   padding: 1px 8px;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 11px;
   font-weight: 500;
 }
 
 .work-log-item-urgency {
-  font-size: 10px;
   padding: 1px 6px;
   border-radius: 4px;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 10px;
 }
 
-.urgency--urgent { background: rgba(240, 130, 130, 0.25); color: #c0392b; }
-.urgency--high   { background: rgba(240, 180, 130, 0.25); color: #c07030; }
-.urgency--mid    { background: rgba(200, 200, 140, 0.25); color: #808020; }
-.urgency--low    { background: rgba(180, 210, 180, 0.25); color: #508050; }
+.urgency--urgent { background: rgba(212, 120, 122, 0.15); color: #d4787a; }
+.urgency--high   { background: rgba(226, 176, 74, 0.15); color: #e2b04a; }
+.urgency--mid    { background: rgba(145, 128, 200, 0.12); color: #9180c8; }
+.urgency--low    { background: rgba(110, 184, 154, 0.12); color: #6eb89a; }
 
 .work-log-item-content {
-  font-size: 11px;
-  color: #6d5080;
+  font-size: 12px;
+  color: #a0a0b4;
   line-height: 1.5;
   margin-bottom: 4px;
-  word-break: break-all;
 }
 
 .work-log-item-foot {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 6px;
 }
 
 .work-log-item-progress {
-  font-size: 10px;
-  color: #b8a0d0;
+  font-size: 11px;
+  color: #555568;
 }
 
 .work-log-item-del {
+  margin-left: auto;
   border: none;
   background: none;
-  color: #c8b0d8;
-  font-size: 11px;
+  color: #444456;
+  font-size: 13px;
   cursor: pointer;
-  padding: 0;
+  padding: 0 4px;
+  transition: color 0.15s;
 }
+
+.work-log-item-del:hover {
+  color: #d4787a;
+}
+</style>
 
 .work-log-item-del:hover {
   color: #a080b8;

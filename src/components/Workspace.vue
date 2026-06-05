@@ -1,64 +1,77 @@
 <!--
   文件路径: src/components/Workspace.vue
-  工作台主组件
+  工作台主组件 —— 「夜曲工作室」暗色主题
 
   左右两栏布局：
-  - 左侧 2/3：日历组件
-  - 右侧 1/3：工作记录入口 / 工作记录日志
+  - 左侧 3/5：日历组件
+  - 右侧 2/5：工作记录入口 / 工作记录日志
+  设计语言：深靛蓝底 + 玻璃面板 + 琥珀暖调点缀
 -->
 <template>
-  <div class="workspace" :style="{ background: currentSkin }">
-    <!-- 左侧：日历 -->
-    <div class="workspace-left">
-      <!-- 顶部返回栏（可拖拽窗口） -->
-      <div class="workspace-topbar" @mousedown="onTopbarMouseDown">
-        <button class="workspace-back-btn" @click="handleClose">← 返回桌宠</button>
+  <div class="workspace">
+    <!-- 顶部栏（可拖拽窗口） -->
+    <div class="ws-topbar" @mousedown="onTopbarMouseDown">
+      <button class="ws-btn-back" @click="handleClose">
+        <span class="ws-btn-back-icon">←</span>
+        <span>返回桌宠</span>
+      </button>
+      <div class="ws-topbar-right">
         <SkinPicker v-model="currentSkin" />
       </div>
-      <Calendar @day-dblclick="onDayDblClick" />
     </div>
 
-    <!-- 右侧：根据状态切换 -->
-    <div class="workspace-right">
-      <!-- 工作提醒横幅（当天有未完成工作时展示） -->
-      <Transition name="reminder-banner-fade">
-        <div
-          v-if="showReminderBanner"
-          class="workspace-reminder-banner"
-          @click="handleReminderBannerClick"
-        >
-          <span class="workspace-reminder-banner-icon">⏰</span>
-          <span class="workspace-reminder-banner-text">今天的工作还没有完成，去处理~</span>
-          <span class="workspace-reminder-banner-arrow">→</span>
-        </div>
-      </Transition>
-
-      <!-- 右侧菜单 -->
-      <div v-if="currentView === 'menu'" class="workspace-menu">
-        <button class="workspace-menu-btn" @click="currentView = 'worklog'">
-          📋 工作记录
-        </button>
-        <button class="workspace-menu-btn" @click="openTypeManager('menu')">
-          ⚙️ 管理工作类型
-        </button>
+    <!-- 主体：左右两栏 -->
+    <div class="ws-main">
+      <!-- 左侧：日历 -->
+      <div class="ws-left">
+        <Calendar @day-dblclick="onDayDblClick" />
       </div>
 
-      <!-- 新增工作表单 -->
-      <WorkForm
-        v-else-if="currentView === 'workform'"
-        :date="selectedWorkDate"
-        @back="currentView = 'menu'"
-        @manage-types="openTypeManager('workform')"
-      />
+      <!-- 右侧：面板 -->
+      <div class="ws-right">
+        <!-- 工作提醒横幅 -->
+        <Transition name="ws-banner">
+          <div
+            v-if="showReminderBanner"
+            class="ws-banner"
+            @click="handleReminderBannerClick"
+          >
+            <span class="ws-banner-dot" />
+            <span class="ws-banner-text">今天的工作还没有完成，去处理~</span>
+            <span class="ws-banner-arrow">→</span>
+          </div>
+        </Transition>
 
-      <!-- 工作类型管理 -->
-      <WorkTypeManager
-        v-else-if="currentView === 'worktype-manager'"
-        @back="currentView = previousView"
-      />
+        <!-- 视图路由器 -->
+        <div class="ws-panel">
+          <div v-if="currentView === 'menu'" class="ws-menu">
+            <button class="ws-menu-card" @click="currentView = 'worklog'">
+              <span class="ws-menu-card-icon">📋</span>
+              <span class="ws-menu-card-label">工作记录</span>
+              <span class="ws-menu-card-desc">查看历史工作日志</span>
+            </button>
+            <button class="ws-menu-card" @click="openTypeManager('menu')">
+              <span class="ws-menu-card-icon">⚙️</span>
+              <span class="ws-menu-card-label">工作类型</span>
+              <span class="ws-menu-card-desc">自定义工作分类</span>
+            </button>
+          </div>
 
-      <!-- 工作记录日志 -->
-      <WorkLog v-else @back="currentView = 'menu'" />
+          <WorkForm
+            v-else-if="currentView === 'workform'"
+            :date="selectedWorkDate"
+            @back="currentView = 'menu'"
+            @manage-types="openTypeManager('workform')"
+          />
+
+          <WorkTypeManager
+            v-else-if="currentView === 'worktype-manager'"
+            @back="currentView = previousView"
+          />
+
+          <WorkLog v-else @back="currentView = 'menu'" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -85,8 +98,6 @@ const SKIN_KEY = 'codepet-workspace-skin'
 const currentSkin = ref<string>(
   localStorage.getItem(SKIN_KEY) || DEFAULT_SKIN
 )
-
-// 皮肤变更时持久化
 watch(currentSkin, (val) => {
   localStorage.setItem(SKIN_KEY, val)
 })
@@ -201,153 +212,243 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* ========================================
+   Workspace — 夜曲工作室 暗色主题
+   ======================================== */
+
 .workspace {
+  --ws-bg: #09090f;
+  --ws-bg-soft: #12121d;
+  --ws-surface: rgba(255, 255, 255, 0.025);
+  --ws-surface-hover: rgba(255, 255, 255, 0.05);
+  --ws-surface-active: rgba(255, 255, 255, 0.08);
+  --ws-border: rgba(255, 255, 255, 0.06);
+  --ws-border-focus: rgba(255, 255, 255, 0.12);
+  --ws-text: #e4e4ec;
+  --ws-text-muted: #6e6e80;
+  --ws-text-dim: #444456;
+  --ws-accent: #e2b04a;
+  --ws-accent-soft: #c99a3a;
+  --ws-accent-glow: rgba(226, 176, 74, 0.12);
+  --ws-accent-glow-strong: rgba(226, 176, 74, 0.25);
+  --ws-lavender: #9180c8;
+  --ws-lavender-glow: rgba(145, 128, 200, 0.12);
+  --ws-rose: #d4787a;
+  --ws-mint: #6eb89a;
+
   width: 100%;
   height: 100%;
   display: flex;
-  gap: 0;
-  background: rgba(245, 242, 250, 0.95);
-  pointer-events: auto;
-}
-
-/* 左侧日历区 2/3 */
-.workspace-left {
-  flex: 2;
-  padding: 10px;
-  min-width: 0;
-  display: flex;
   flex-direction: column;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(145, 128, 200, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(226, 176, 74, 0.04) 0%, transparent 50%),
+    var(--ws-bg);
+  color: var(--ws-text);
+  pointer-events: auto;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
 }
 
-/* 顶部返回栏（可拖拽窗口） */
-.workspace-topbar {
-  margin-bottom: 6px;
+/* ===== 顶部栏 ===== */
+.ws-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.015);
+  border-bottom: 1px solid var(--ws-border);
+  flex-shrink: 0;
   cursor: grab;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.workspace-back-btn {
-  padding: 4px 14px;
-  border: none;
-  background: rgba(200, 190, 220, 0.3);
-  color: #6d5080;
+.ws-topbar:active {
+  cursor: grabbing;
+}
+
+.ws-btn-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border: 1px solid var(--ws-border);
   border-radius: 8px;
+  background: var(--ws-surface);
+  color: var(--ws-text-muted);
   font-size: 12px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.2s ease;
 }
 
-.workspace-back-btn:hover {
-  background: rgba(200, 190, 220, 0.55);
+.ws-btn-back:hover {
+  background: var(--ws-surface-hover);
+  color: var(--ws-text);
+  border-color: var(--ws-border-focus);
 }
 
-/* 右侧面板区 1/3 */
-.workspace-right {
-  flex: 1;
-  min-width: 0;
-  border-left: 1px solid rgba(180, 170, 200, 0.25);
-  display: flex;
-  flex-direction: column;
-}
-
-/* 右侧菜单 */
-.workspace-menu {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 20px;
-}
-
-.workspace-menu-btn {
-  padding: 10px 24px;
-  border: none;
-  background: rgba(200, 190, 220, 0.3);
-  color: #5d4070;
-  border-radius: 10px;
+.ws-btn-back-icon {
   font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s;
+  transition: transform 0.2s ease;
 }
 
-.workspace-menu-btn:hover {
-  background: rgba(200, 190, 220, 0.55);
-  transform: translateY(-1px);
+.ws-btn-back:hover .ws-btn-back-icon {
+  transform: translateX(-2px);
 }
 
-/* ========================================
-   工作提醒横幅
-   ======================================== */
-
-.workspace-reminder-banner {
+.ws-topbar-right {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
-  margin: 8px 10px 0;
-  background: linear-gradient(135deg, rgba(255, 220, 180, 0.55), rgba(255, 200, 160, 0.45));
-  border: 1px solid rgba(240, 180, 130, 0.35);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  animation: reminder-banner-pulse 2s ease-in-out infinite;
 }
 
-.workspace-reminder-banner:hover {
-  background: linear-gradient(135deg, rgba(255, 210, 160, 0.7), rgba(255, 190, 140, 0.6));
-  border-color: rgba(240, 170, 110, 0.5);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(200, 150, 100, 0.2);
-}
-
-.workspace-reminder-banner-icon {
-  font-size: 15px;
-  flex-shrink: 0;
-}
-
-.workspace-reminder-banner-text {
+/* ===== 主体两栏 ===== */
+.ws-main {
   flex: 1;
-  font-size: 12px;
-  font-weight: 500;
-  color: #8b5e3c;
+  display: flex;
+  min-height: 0;
+}
+
+/* ===== 左侧：日历 ===== */
+.ws-left {
+  flex: 3;
+  min-width: 0;
+  padding: 12px 10px 12px 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== 右侧：面板 ===== */
+.ws-right {
+  flex: 2;
+  min-width: 280px;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--ws-border);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.ws-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ===== 菜单卡片 ===== */
+.ws-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 16px;
+}
+
+.ws-menu-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 18px 20px;
+  border: 1px solid var(--ws-border);
+  border-radius: 14px;
+  background: var(--ws-surface);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: left;
+}
+
+.ws-menu-card:hover {
+  background: var(--ws-surface-hover);
+  border-color: var(--ws-border-focus);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.ws-menu-card-icon {
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.ws-menu-card-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ws-text);
+}
+
+.ws-menu-card-desc {
+  font-size: 11px;
+  color: var(--ws-text-muted);
   line-height: 1.4;
 }
 
-.workspace-reminder-banner-arrow {
-  font-size: 13px;
-  color: #b88060;
+/* ===== 提醒横幅 ===== */
+.ws-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  margin: 12px 14px 0;
+  background: var(--ws-accent-glow);
+  border: 1px solid rgba(226, 176, 74, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.ws-banner:hover {
+  background: var(--ws-accent-glow-strong);
+  border-color: rgba(226, 176, 74, 0.35);
+  transform: translateY(-1px);
+}
+
+.ws-banner-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ws-accent);
+  flex-shrink: 0;
+  animation: ws-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ws-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--ws-accent-glow-strong); }
+  50% { box-shadow: 0 0 0 6px transparent; }
+}
+
+.ws-banner-text {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ws-accent);
+  line-height: 1.4;
+}
+
+.ws-banner-arrow {
+  font-size: 14px;
+  color: var(--ws-accent-soft);
   flex-shrink: 0;
   transition: transform 0.2s ease;
 }
 
-.workspace-reminder-banner:hover .workspace-reminder-banner-arrow {
+.ws-banner:hover .ws-banner-arrow {
   transform: translateX(3px);
 }
 
-/* 横幅脉冲动画 */
-@keyframes reminder-banner-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 180, 130, 0.3); }
-  50% { box-shadow: 0 0 0 4px rgba(240, 180, 130, 0); }
-}
-
-/* 横幅淡入淡出过渡 */
-.reminder-banner-fade-enter-active,
-.reminder-banner-fade-leave-active {
+/* ===== 过渡动画 ===== */
+.ws-banner-enter-active,
+.ws-banner-leave-active {
   transition: all 0.3s ease;
 }
-
-.reminder-banner-fade-enter-from {
+.ws-banner-enter-from {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-8px) scale(0.97);
 }
-
-.reminder-banner-fade-leave-to {
+.ws-banner-leave-to {
   opacity: 0;
-  transform: translateY(-4px);
+  transform: translateY(-4px) scale(0.98);
 }
 </style>
