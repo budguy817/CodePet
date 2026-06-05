@@ -257,6 +257,9 @@ onMounted(() => {
   border-bottom: 1px solid var(--ws-border);
   flex-shrink: 0;
   cursor: grab;
+  overflow: visible;
+  position: relative;
+  z-index: 10;
 }
 
 .ws-topbar:active {

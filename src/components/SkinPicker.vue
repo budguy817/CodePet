@@ -92,11 +92,13 @@ const closeOutside = (): void => {
   top: calc(100% + 6px);
   right: 0;
   background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 10px;
   padding: 10px;
-  box-shadow: 0 4px 16px rgba(100, 90, 130, 0.16);
-  z-index: 50;
+  border: 1px solid rgba(140, 120, 170, 0.15);
+  box-shadow: 0 8px 24px rgba(80, 60, 120, 0.18);
+  z-index: 999;
 }
 
 .skin-colors {
