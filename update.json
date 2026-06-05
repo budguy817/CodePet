@@ -1,0 +1,11 @@
+{
+  "version": "0.1.1",
+  "notes": "CodePet v0.1.1 更新内容：\n- 新增自动更新功能\n- 完善工作台自定义工作类型\n- 优化工作台布局和视觉风格\n- 修复调色器遮挡问题",
+  "pub_date": "2026-06-05T00:00:00Z",
+  "platforms": {
+    "windows-x86_64": {
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSc2liTERNbnhWMWxUNW5LSGJWSURuVGtST2lzd2hhNXpGQVZ2STR1MDlRMWRXQkl1cWdHVWdmSGlxalVJbEt0TG8yTEsydGNKVzBUQ21aaWhCcnpyUzhueTRUT0U0L1FvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzgwNjQ3MjQwCWZpbGU6Q29kZVBldF8wLjEuMV94NjQtc2V0dXAuZXhlCks0OWZvYlovektTaVRSTUxIUnlFMnNDcTYxQ0pQRnZXWDZCeGpzVHV6RGozVkJFaFZQTWYxdDZSUUxqdVdoRUVDdy8rTTZ5M0s2UUNvcnRXaDJ1akJBPT0K",
+      "url": "https://github.com/budguy817/CodePet/releases/download/v0.1.1/CodePet_0.1.1_x64-setup.exe"
+    }
+  }
+}
