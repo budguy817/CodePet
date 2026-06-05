@@ -1,3 +1,9 @@
+# Tauri signing key (防止在当前目录生成时误提交)
+~/
+
+# Environment variables
+.env
+
 # Logs
 logs
 *.log
